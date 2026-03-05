@@ -13,7 +13,7 @@
    ```
 3. Run one functional test file:
    ```bash
-   cabal run tests/t1.4TH
+   cabal run FORTH -- tests/t1.4TH
    ```
 
 ## Unit tests
@@ -37,7 +37,7 @@ To verify all quickly:
 
 ```bash
 for i in {1..10}; do
-  cabal run tests/t${i}.4TH > /tmp/t${i}.actual
+  cabal run FORTH -- tests/t${i}.4TH > /tmp/t${i}.actual
   diff -u tests/t${i}.out /tmp/t${i}.actual || exit 1
   echo "t${i} OK"
 done
@@ -61,3 +61,16 @@ done
 - The original project depended on `flow` only for a pipeline operator in `Interpret.hs`. The interpreter was refactored to plain recursive processing so it can support user-defined functions and dictionary state.
 - To support `STR`/`CONCAT*` correctly, a dedicated `Str` value type was added so strings are distinct from unresolved identifiers.
 - Functional output files were written manually as required and include a case validating the non-empty stack message.
+
+## Functional test case map
+
+- `t1.4TH`: basic addition (`+`) and output with `.`
+- `t2.4TH`: subtraction (`-`) using stack order
+- `t3.4TH`: division (`/`) using stack order
+- `t4.4TH`: power (`^`)
+- `t5.4TH`: `EMIT` and `CR` (ASCII output + newline)
+- `t6.4TH`: `STR` + `CONCAT2`
+- `t7.4TH`: multi-step RPN evaluation (`1 2 3 + * .`)
+- `t8.4TH`: bonus user-defined word (`: SQR DUP * ;`)
+- `t9.4TH`: bonus user-defined word with `EMIT` composition (`: STAR 42 EMIT ;`)
+- `t10.4TH`: non-empty stack at end, verifying `Main.hs` stack-reporting message

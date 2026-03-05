@@ -65,6 +65,7 @@ main = hspec $ do
 
     it "emits error when EMIT gets wrong input" $ do
       evaluate (evalOut "EMIT" ([Id "x"], "")) `shouldThrow` errorCall "EMIT expects a number"
+      evaluate (evalOut "EMIT" ([Integer 200], "")) `shouldThrow` errorCall "Invalid ASCII code"
 
     it "eval pass-through" $ do
       evalOut "*" ([Real 2.0, Integer 2], "blah") `shouldBe` ([Real 4.0], "blah")

@@ -76,7 +76,7 @@ evalOut "." ([], _) = error "Stack underflow"
 
 -- Emit ascii/unicode character from codepoint
 evalOut "EMIT" (Integer i:tl, out)
-  | i < 0 || i > fromEnum (maxBound :: Char) = error "Invalid ASCII code"
+  | i < 0 || i > 127 = error "Invalid ASCII code"
   | otherwise = (tl, out ++ [chr i])
 evalOut "EMIT" (Real x:tl, out) = evalOut "EMIT" (Integer (truncate x):tl, out)
 evalOut "EMIT" (_:_, _) = error "EMIT expects a number"
