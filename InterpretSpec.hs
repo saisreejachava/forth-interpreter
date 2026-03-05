@@ -25,6 +25,12 @@ main = hspec $ do
     it "can leave items on the stack (covered by Main output handling)" $ do
       interpret "2 3 +" `shouldBe` ([Integer 5], "")
 
+    it "supports backslash comments to end of line" $ do
+      interpret "5 6 + \\ add numbers\n." `shouldBe` ([], "11")
+
+    it "supports parenthesized comments" $ do
+      interpret "( compute sum ) 5 6 + ." `shouldBe` ([], "11")
+
   describe "interpret bonus user-defined words" $ do
     it "defines and uses a function" $ do
       interpret ": SQR DUP * ; 7 SQR ." `shouldBe` ([], "49")

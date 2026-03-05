@@ -4,6 +4,25 @@ module Interpret where
 import Val
 import Eval
 
+stripLineComment :: [String] -> [String]
+stripLineComment [] = []
+stripLineComment ("\\":_) = []
+stripLineComment (x:tl) = x : stripLineComment tl
+
+stripParenComments :: [String] -> [String]
+stripParenComments = go False
+    where
+        go _ [] = []
+        go False ("(":tl) = go True tl
+        go False (x:tl) = x : go False tl
+        go True (")":tl) = go False tl
+        go True (_:tl) = go True tl
+
+tokenize :: String -> [String]
+tokenize text =
+    let perLine = map (stripLineComment . words) (lines text)
+    in stripParenComments (concat perLine)
+
 -- inner function for foldl
 -- Takes the current stack and an input and 
 -- computes the next stack
@@ -52,5 +71,5 @@ runTokens dict state (tok:tl) =
 -- an output string
 interpret :: String -> ([Val], String)
 interpret text =
-    let (_, result) = runTokens [] ([], "") (words text)
+    let (_, result) = runTokens [] ([], "") (tokenize text)
     in result

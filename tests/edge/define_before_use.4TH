@@ -1,0 +1,2 @@
+SQR .
+: SQR DUP * ;

@@ -43,6 +43,35 @@ for i in {1..10}; do
 done
 ```
 
+## Edge tests
+
+Additional edge-case inputs are in `tests/edge/`.
+
+Run one edge test:
+
+```bash
+cabal run FORTH -- tests/edge/div_zero.4TH
+```
+
+Run all edge tests except recursion:
+
+```bash
+for f in tests/edge/*.4TH; do
+  [ "$(basename "$f")" = "recursive_loop.4TH" ] && continue
+  echo "===== $(basename "$f")"
+  cabal run FORTH -- "$f"
+  echo "exit=$?"
+  echo
+done
+```
+
+Run recursion test safely (limit CPU time):
+
+```bash
+(ulimit -t 2; cabal run FORTH -- tests/edge/recursive_loop.4TH)
+echo "exit=$?"
+```
+
 ## Implemented features
 
 - Arithmetic built-ins: `*`, `+`, `-`, `/`, `^`
